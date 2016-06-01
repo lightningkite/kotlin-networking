@@ -1,4 +1,4 @@
-package com.lightningkite.kotlincomponents.networking
+package com.ivieleague.kotlin.networking
 
 /**
  * Created by jivie on 3/29/16.

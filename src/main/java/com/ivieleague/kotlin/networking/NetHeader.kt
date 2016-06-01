@@ -1,4 +1,4 @@
-package com.lightningkite.kotlincomponents.networking
+package com.ivieleague.kotlin.networking
 
 import java.util.*
 

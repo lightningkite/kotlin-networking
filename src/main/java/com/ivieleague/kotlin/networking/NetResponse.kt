@@ -1,12 +1,7 @@
-package com.lightningkite.kotlincomponents.networking
+package com.ivieleague.kotlin.networking
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.*
-import com.lightningkite.kotlincomponents.MyGson
-import com.lightningkite.kotlincomponents.image.BitmapFactory_decodeByteArraySized
-import org.json.JSONObject
 import java.lang.reflect.Type
 
 /**
@@ -36,14 +31,6 @@ class NetResponse(
     fun jsonElement(): JsonElement = JsonParser().parse(string())
     fun jsonObject(): JsonObject = JsonParser().parse(string()) as JsonObject
     fun jsonArray(): JsonArray = JsonParser().parse(string()) as JsonArray
-    fun toJSONObject(): JSONObject {
-        try {
-            return JSONObject(string())
-        } catch(e: Exception) {
-            e.printStackTrace()
-            return JSONObject()
-        }
-    }
 
     inline fun <reified T : Any> gson(gson: Gson = MyGson.gson): T? {
         return gson.fromJson<T>(string())
@@ -57,30 +44,10 @@ class NetResponse(
         return gson.fromJson<T>(string(), type)
     }
 
-    fun bitmap(options: BitmapFactory.Options = BitmapFactory.Options()): Bitmap? {
-        try {
-            return BitmapFactory.decodeByteArray(raw, 0, raw.size)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
-        }
-    }
-
-    fun bitmapSized(maxWidth: Int, maxHeight: Int): Bitmap? {
-        try {
-            return BitmapFactory_decodeByteArraySized(raw, 0, raw.size)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
-        }
-    }
-
-
     inline fun <reified T : Any> auto(): T? {
         return when (T::class.java) {
             Unit::class.java -> Unit as T
             String::class.java -> string() as T
-            Bitmap::class.java -> bitmap() as T
             else -> gson<T>()
         }
     }
