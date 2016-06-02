@@ -41,4 +41,6 @@ open class NetInterface : NetStack {
             }
         })
     }
+
+    object default : NetInterface() {}
 }
