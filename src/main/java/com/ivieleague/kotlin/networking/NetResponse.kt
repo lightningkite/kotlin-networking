@@ -33,15 +33,27 @@ class NetResponse(
     fun jsonArray(): JsonArray = JsonParser().parse(string()) as JsonArray
 
     inline fun <reified T : Any> gson(gson: Gson = MyGson.gson): T? {
-        return gson.fromJson<T>(string())
+        try {
+            return gson.fromJson<T>(string())
+        } catch(e: Exception) {
+            e.printStackTrace(); return null
+        }
     }
 
     fun <T : Any> gson(type: Class<T>, gson: Gson = MyGson.gson): T? {
-        return gson.fromJson<T>(string(), type)
+        try {
+            return gson.fromJson<T>(string(), type)
+        } catch(e: Exception) {
+            e.printStackTrace(); return null
+        }
     }
 
     fun <T : Any> gson(type: Type, gson: Gson = MyGson.gson): T? {
-        return gson.fromJson<T>(string(), type)
+        try {
+            return gson.fromJson<T>(string(), type)
+        } catch(e: Exception) {
+            e.printStackTrace(); return null
+        }
     }
 
     inline fun <reified T : Any> auto(): T? {
