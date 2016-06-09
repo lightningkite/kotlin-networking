@@ -50,7 +50,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
             onResult: (NetResponse) -> Unit
     ) = netInterface.stack.async(request(method, body, specialHeaders), onResult)
 
-    fun sync(
+    fun response(
             method: NetMethod,
             body: NetBody = NetBody.EMPTY,
             specialHeaders: Map<String, String> = NetHeader.EMPTY
@@ -66,6 +66,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
     //            crossinline onResult: (T) -> Unit
     //    ) = request(method, data, specialHeaders, { true }, onResult)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> async(
             method: NetMethod,
             data: Any?,
@@ -89,12 +90,14 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
         }
     }
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> get(
             specialHeaders: Map<String, String> = mapOf(),
             crossinline onError: (NetResponse) -> Boolean,
             crossinline onResult: (T) -> Unit
     ) = async(NetMethod.GET, null, specialHeaders, onError, onResult)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> post(
             data: Any?,
             specialHeaders: Map<String, String> = mapOf(),
@@ -102,6 +105,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
             crossinline onResult: (T) -> Unit
     ) = async(NetMethod.POST, data, specialHeaders, onError, onResult)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> put(
             data: Any?,
             specialHeaders: Map<String, String> = mapOf(),
@@ -109,6 +113,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
             crossinline onResult: (T) -> Unit
     ) = async(NetMethod.PUT, data, specialHeaders, onError, onResult)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> patch(
             data: Any?,
             specialHeaders: Map<String, String> = mapOf(),
@@ -116,6 +121,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
             crossinline onResult: (T) -> Unit
     ) = async(NetMethod.PATCH, data, specialHeaders, onError, onResult)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> delete(
             data: Any? = null,
             specialHeaders: Map<String, String> = mapOf(),
@@ -125,7 +131,10 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
 
     //------------SYNC---------------
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> sync(method: NetMethod, data: Any?, specialHeaders: Map<String, String> = mapOf()): T? = syncGet(specialHeaders, { true })
+
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> sync(
             method: NetMethod,
             data: Any?,
@@ -154,33 +163,43 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
         return null
     }
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncGet(specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.GET, null, specialHeaders)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncGet(specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.GET, null, specialHeaders, onError)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncPost(data: Any?, specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.POST, data, specialHeaders)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncPost(data: Any?, specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.POST, data, specialHeaders, onError)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncPut(data: Any?, specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.PUT, data, specialHeaders)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncPut(data: Any?, specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.PUT, data, specialHeaders, onError)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncPatch(data: Any?, specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.PATCH, data, specialHeaders)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncPatch(data: Any?, specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.PATCH, data, specialHeaders, onError)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncDelete(data: Any?, specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.DELETE, data, specialHeaders)
 
+    @Deprecated("Forces GSON")
     inline fun <reified T : Any> syncDelete(data: Any?, specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.DELETE, data, specialHeaders, onError)
 }
