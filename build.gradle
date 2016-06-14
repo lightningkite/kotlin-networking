@@ -23,7 +23,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile 'junit:junit:4.11'
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    compile project(':kotlin-core')
+    compile "com.github.lightningkite:kotlin-core:publish-SNAPSHOT"
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.github.salomonbrys.kotson:kotson:2.1.0'
