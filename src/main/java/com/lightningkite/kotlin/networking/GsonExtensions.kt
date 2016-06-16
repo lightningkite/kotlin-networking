@@ -1,4 +1,4 @@
-package com.ivieleague.kotlin.networking
+package com.lightningkite.kotlin.networking
 
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.*

@@ -1,4 +1,4 @@
-package com.ivieleague.kotlin.networking
+package com.lightningkite.kotlin.networking
 
 import com.google.gson.JsonObject
 import java.io.InputStream

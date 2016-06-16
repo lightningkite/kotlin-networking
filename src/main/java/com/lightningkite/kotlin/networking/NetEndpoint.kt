@@ -1,6 +1,6 @@
-package com.ivieleague.kotlin.networking
+package com.lightningkite.kotlin.networking
 
-import com.ivieleague.kotlin.runAll
+import com.lightningkite.kotlin.runAll
 import java.util.*
 
 /**

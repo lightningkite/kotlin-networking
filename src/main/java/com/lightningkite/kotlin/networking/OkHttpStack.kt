@@ -1,4 +1,4 @@
-package com.ivieleague.kotlin.networking
+package com.lightningkite.kotlin.networking
 
 import com.squareup.okhttp.MediaType
 import com.squareup.okhttp.OkHttpClient

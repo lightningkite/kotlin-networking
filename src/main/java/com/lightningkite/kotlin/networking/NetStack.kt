@@ -1,4 +1,4 @@
-package com.ivieleague.kotlin.networking
+package com.lightningkite.kotlin.networking
 
 /**
  * An interface that represents something that works like a network stack, be it a real stack or a mock stack.

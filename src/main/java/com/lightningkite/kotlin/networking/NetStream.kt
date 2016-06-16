@@ -1,11 +1,11 @@
-package com.ivieleague.kotlin.networking
+package com.lightningkite.kotlin.networking
 
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.ivieleague.kotlin.stream.toByteArray
+import com.lightningkite.kotlin.stream.toByteArray
 import java.io.*
 import java.lang.reflect.Type
 

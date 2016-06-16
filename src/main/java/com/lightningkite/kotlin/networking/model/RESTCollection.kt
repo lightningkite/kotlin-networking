@@ -1,12 +1,12 @@
-package com.ivieleague.kotlin.networking.model
+package com.lightningkite.kotlin.networking.model
 
-import com.ivieleague.kotlin.external.ExternalCollection
-import com.ivieleague.kotlin.external.ExternalModel
-import com.ivieleague.kotlin.networking.NetEndpoint
-import com.ivieleague.kotlin.networking.NetMethod
-import com.ivieleague.kotlin.networking.NetResponse
-import com.ivieleague.kotlin.networking.gsonToNetBody
-import com.ivieleague.kotlin.runAll
+import com.lightningkite.kotlin.external.ExternalCollection
+import com.lightningkite.kotlin.external.ExternalModel
+import com.lightningkite.kotlin.networking.NetEndpoint
+import com.lightningkite.kotlin.networking.NetMethod
+import com.lightningkite.kotlin.networking.NetResponse
+import com.lightningkite.kotlin.networking.gsonToNetBody
+import com.lightningkite.kotlin.runAll
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.util.*
@@ -91,12 +91,12 @@ open class RESTCollection<T : Any>(var baseEndpoint: NetEndpoint, val type: Type
     }
 }
 
-/*package com.ivieleague.kotlin.networking.model
+/*package com.lightningkite.kotlin.networking.model
 
-import com.ivieleague.kotlin.external.ExternalCollection
-import com.ivieleague.kotlin.external.ExternalModel
-import com.ivieleague.kotlin.networking.*
-import com.ivieleague.kotlin.runAll
+import com.lightningkite.kotlin.external.ExternalCollection
+import com.lightningkite.kotlin.external.ExternalModel
+import com.lightningkite.kotlin.networking.*
+import com.lightningkite.kotlin.runAll
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.util.*
