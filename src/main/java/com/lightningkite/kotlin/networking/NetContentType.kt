@@ -54,5 +54,15 @@ class NetContentType(
          * has a name. Within a given form, the names are unique.
          */
         val FORM = NetContentType("multipart", "form-data")
+
+        fun fromString(type: String): NetContentType {
+            val parts = type.split('/')
+            if (parts.size == 2) {
+                return NetContentType(parts[0], parts[1])
+            } else if (parts.size == 1) {
+                return NetContentType(parts[0])
+            }
+            throw IllegalArgumentException("$type is not a valid content type.")
+        }
     }
 }
