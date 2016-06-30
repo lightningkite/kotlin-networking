@@ -52,6 +52,7 @@ open class NetStream(
     }
 
     val isSuccessful: Boolean get() = code / 100 == 2
+    val ifSuccessful: NetStream? get() = if (isSuccessful) this else null
 
     fun response(): NetResponse {
         return NetResponse(code, raw(), request)

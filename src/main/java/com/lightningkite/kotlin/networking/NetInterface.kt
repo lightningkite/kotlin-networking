@@ -27,7 +27,7 @@ open class NetInterface : NetStack {
                 try {
                     result = response.auto<T>()
                 } catch (e: Exception) {
-                    println(response.string())
+//                    println(response.string())
                     e.printStackTrace()
                 }
             }
