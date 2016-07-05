@@ -66,7 +66,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
     //            crossinline onResult: (T) -> Unit
     //    ) = request(method, data, specialHeaders, { true }, onResult)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonAsync(method, data, specialHeaders, onError, onResult)", "com.lightningkite.kotlin.networking.gsonAsync"))
     inline fun <reified T : Any> async(
             method: NetMethod,
             data: Any?,
@@ -90,14 +90,14 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
         }
     }
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonGet(specialHeaders, onError, onResult)", "com.lightningkite.kotlin.networking.gsonGet"))
     inline fun <reified T : Any> get(
             specialHeaders: Map<String, String> = mapOf(),
             crossinline onError: (NetResponse) -> Boolean,
             crossinline onResult: (T) -> Unit
     ) = async(NetMethod.GET, null, specialHeaders, onError, onResult)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonPost(data, specialHeaders, onError, onResult)", "com.lightningkite.kotlin.networking.gsonPost"))
     inline fun <reified T : Any> post(
             data: Any?,
             specialHeaders: Map<String, String> = mapOf(),
@@ -105,7 +105,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
             crossinline onResult: (T) -> Unit
     ) = async(NetMethod.POST, data, specialHeaders, onError, onResult)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonPut(data, specialHeaders, onError, onResult)", "com.lightningkite.kotlin.networking.gsonPut"))
     inline fun <reified T : Any> put(
             data: Any?,
             specialHeaders: Map<String, String> = mapOf(),
@@ -113,7 +113,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
             crossinline onResult: (T) -> Unit
     ) = async(NetMethod.PUT, data, specialHeaders, onError, onResult)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonPatch(data, specialHeaders, onError, onResult)", "com.lightningkite.kotlin.networking.gsonPatch"))
     inline fun <reified T : Any> patch(
             data: Any?,
             specialHeaders: Map<String, String> = mapOf(),
@@ -121,7 +121,7 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
             crossinline onResult: (T) -> Unit
     ) = async(NetMethod.PATCH, data, specialHeaders, onError, onResult)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonDelete(data, specialHeaders, onError, onResult)", "com.lightningkite.kotlin.networking.gsonDelete"))
     inline fun <reified T : Any> delete(
             data: Any? = null,
             specialHeaders: Map<String, String> = mapOf(),
@@ -131,10 +131,10 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
 
     //------------SYNC---------------
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSync(method, data, specialHeaders)", "com.lightningkite.kotlin.networking.gsonSync"))
     inline fun <reified T : Any> sync(method: NetMethod, data: Any?, specialHeaders: Map<String, String> = mapOf()): T? = syncGet(specialHeaders, { true })
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSync(method, data, specialHeaders, onError)", "com.lightningkite.kotlin.networking.gsonSync"))
     inline fun <reified T : Any> sync(
             method: NetMethod,
             data: Any?,
@@ -163,43 +163,43 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
         return null
     }
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncGet(specialHeaders)", "com.lightningkite.kotlin.networking.gsonSyncGet"))
     inline fun <reified T : Any> syncGet(specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.GET, null, specialHeaders)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncGet(specialHeaders, onError)", "com.lightningkite.kotlin.networking.gsonSyncGet"))
     inline fun <reified T : Any> syncGet(specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.GET, null, specialHeaders, onError)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncPost(data, specialHeaders)", "com.lightningkite.kotlin.networking.gsonSyncPost"))
     inline fun <reified T : Any> syncPost(data: Any?, specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.POST, data, specialHeaders)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncPost(data, specialHeaders, onError)", "com.lightningkite.kotlin.networking.gsonSyncPost"))
     inline fun <reified T : Any> syncPost(data: Any?, specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.POST, data, specialHeaders, onError)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncPut(data, specialHeaders)", "com.lightningkite.kotlin.networking.gsonSyncPut"))
     inline fun <reified T : Any> syncPut(data: Any?, specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.PUT, data, specialHeaders)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncPut(data, specialHeaders, onError)", "com.lightningkite.kotlin.networking.gsonSyncPut"))
     inline fun <reified T : Any> syncPut(data: Any?, specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.PUT, data, specialHeaders, onError)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncPatch(data, specialHeaders)", "com.lightningkite.kotlin.networking.gsonSyncPatch"))
     inline fun <reified T : Any> syncPatch(data: Any?, specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.PATCH, data, specialHeaders)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncPatch(data, specialHeaders, onError)", "com.lightningkite.kotlin.networking.gsonSyncPatch"))
     inline fun <reified T : Any> syncPatch(data: Any?, specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.PATCH, data, specialHeaders, onError)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncDelete(data, specialHeaders)", "com.lightningkite.kotlin.networking.gsonSyncDelete"))
     inline fun <reified T : Any> syncDelete(data: Any?, specialHeaders: Map<String, String> = mapOf()): T?
             = sync(NetMethod.DELETE, data, specialHeaders)
 
-    @Deprecated("Forces GSON")
+    @Deprecated("Forces GSON", ReplaceWith("gsonSyncDelete(data, specialHeaders, onError)", "com.lightningkite.kotlin.networking.gsonSyncDelete"))
     inline fun <reified T : Any> syncDelete(data: Any?, specialHeaders: Map<String, String> = mapOf(), onError: (NetResponse) -> Boolean): T?
             = sync(NetMethod.DELETE, data, specialHeaders, onError)
 }
