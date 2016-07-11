@@ -28,6 +28,9 @@ object MyGson {
     inline fun <reified T : Any> register(adapter: JsonDeserializer<T>) = register(T::class.java, adapter)
     inline fun <reified T : Any> register(adapter: JsonSerializer<T>) = register(T::class.java, adapter)
     inline fun <reified T : Any> register(adapter: TypeAdapter<T>) = register(T::class.java, adapter)
+    inline fun <reified T : Any> registerNullable(adapter: JsonDeserializer<T?>) = register(T::class.java, adapter)
+    inline fun <reified T : Any> registerNullable(adapter: JsonSerializer<T?>) = register(T::class.java, adapter)
+    inline fun <reified T : Any> registerNullable(adapter: TypeAdapter<T?>) = register(T::class.java, adapter)
 
     private val factories = ArrayList<TypeAdapterFactory>()
     fun registerFactory(factory: TypeAdapterFactory) {
@@ -41,7 +44,7 @@ object MyGson {
     val gson: Gson get() = gsonInternal ?: initialize()
 
     fun update() {
-        if (gsonInternal == null) return;
+        if (gsonInternal == null) return
         initialize()
     }
 
