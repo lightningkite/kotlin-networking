@@ -55,7 +55,12 @@ open class NetStream(
     val ifSuccessful: NetStream? get() = if (isSuccessful) this else null
 
     fun response(): NetResponse {
-        return NetResponse(code, raw(), request)
+        try {
+            return NetResponse(code, raw(), request)
+        } catch(e: Exception) {
+            e.printStackTrace()
+            return NetResponse(0, (e.message ?: "Failed").toByteArray(Charsets.UTF_8), request)
+        }
     }
 
     fun raw(): ByteArray = readStream { it.toByteArray() }
