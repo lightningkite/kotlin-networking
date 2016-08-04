@@ -30,6 +30,10 @@ fun Any?.toJsonElement(): JsonElement {
     }
 }
 
+fun Any.gsonToJson(gson: Gson = MyGson.gson): JsonElement {
+    return gson.toJsonTree(this)
+}
+
 fun Any.gsonTo(gson: Gson = MyGson.gson): String {
     return gson.toJson(this)
 }

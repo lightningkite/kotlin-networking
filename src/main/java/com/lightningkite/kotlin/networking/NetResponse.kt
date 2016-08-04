@@ -24,6 +24,7 @@ class NetResponse(
         try {
             return raw.toString(Charsets.UTF_8)
         } catch(e: Exception) {
+            e.printStackTrace()
             return ""
         }
     }
