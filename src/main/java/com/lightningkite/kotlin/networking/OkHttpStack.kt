@@ -1,9 +1,9 @@
 package com.lightningkite.kotlin.networking
 
-import com.squareup.okhttp.MediaType
-import com.squareup.okhttp.OkHttpClient
-import com.squareup.okhttp.Request
-import com.squareup.okhttp.RequestBody
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import okio.BufferedSink
 import java.io.ByteArrayInputStream
 
@@ -12,7 +12,12 @@ import java.io.ByteArrayInputStream
  */
 object OkHttpStack : NetStack {
 
-    val client: OkHttpClient by lazy(LazyThreadSafetyMode.NONE) { OkHttpClient() }
+    val client: OkHttpClient get() = internalClient ?: setupClient()
+    private var internalClient: OkHttpClient? = null
+    fun setupClient(builder: OkHttpClient.Builder = OkHttpClient.Builder()): OkHttpClient {
+        internalClient = builder.build()
+        return internalClient!!
+    }
 
     override fun stream(request: NetRequest): NetStream {
         try {

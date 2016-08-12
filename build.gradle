@@ -22,6 +22,6 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     compile project(':kotlin-core')
     compile 'com.google.code.gson:gson:2.4'
-    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.github.salomonbrys.kotson:kotson:2.1.0'
 }
