@@ -6,7 +6,7 @@ import java.util.*
 /**
  * Created by jivie on 2/26/16.
  */
-open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, val preQueryUrl: String, val queryParams: Map<String, String> = mapOf()) {
+open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, val preQueryUrl: String, val queryParams: List<Pair<String, String>> = listOf()) {
 
     companion object {
         fun fromUrl(url: String, netInterface: NetInterface = NetInterface.default): NetEndpoint {
@@ -17,15 +17,17 @@ open class NetEndpoint(val netInterface: NetInterface = NetInterface.default, va
                     url.substring(0, index),
                     url.substring(index + 1)
                             .split('&')
-                            .map { it.split('=') }
-                            .associateBy({ it[0] }, { it[1] })
+                            .map {
+                                val parts = it.split('=')
+                                parts[0] to if (parts.size > 1) parts[1] else ""
+                            }
             )
         }
     }
 
     fun fromUrl(url: String): NetEndpoint = fromUrl(url, netInterface)
 
-    val url: String = if (queryParams.isEmpty()) preQueryUrl else preQueryUrl + "?" + queryParams.entries.joinToString("&") { it.key + "=" + it.value }
+    val url: String = if (queryParams.isEmpty()) preQueryUrl else preQueryUrl + "?" + queryParams.joinToString("&") { it.first + "=" + it.second }
 
     fun sub(subUrl: String) = NetEndpoint(netInterface, preQueryUrl + (if (preQueryUrl.endsWith('/')) "" else "/") + subUrl, queryParams)
     fun sub(id: Long) = NetEndpoint(netInterface, preQueryUrl + (if (preQueryUrl.endsWith('/')) "" else "/") + id.toString(), queryParams)
