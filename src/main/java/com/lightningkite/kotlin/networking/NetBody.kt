@@ -1,5 +1,6 @@
 package com.lightningkite.kotlin.networking
 
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.io.InputStream
 import java.io.OutputStream
@@ -58,6 +59,9 @@ fun JsonObject.toNetBody(): NetBody {
 }
 
 fun <T : Any> T.gsonToNetBody(): NetBody {
+    if (this is JsonElement) {
+        return NetBody.ByteArrayBody(NetContentType.JSON, toString().toByteArray())
+    }
     return NetBody.ByteArrayBody(NetContentType.JSON, gsonTo().toByteArray())
 }
 
