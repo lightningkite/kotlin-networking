@@ -25,6 +25,14 @@ fun <T : Any> T.gsonToRequestBody(): RequestBody {
     return RequestBody.create(MediaTypes.JSON, this.gsonToString())
 }
 
+fun JsonElement.toRequestBody(): RequestBody {
+    return RequestBody.create(MediaTypes.JSON, this.toString())
+}
+
+fun String.toRequestBody(): RequestBody {
+    return RequestBody.create(MediaTypes.TEXT, this)
+}
+
 fun File.toRequestBody(type: MediaType): RequestBody {
     return RequestBody.create(type, this)
 }
@@ -57,6 +65,8 @@ inline fun <T> Request.Builder.lambda(
     }
 }
 
+fun Request.Builder.lambdaUnit() = lambda<Unit> { Unit }
+
 fun Request.Builder.lambdaString() = lambda<String> { it.body().string() }
 
 fun Request.Builder.lambdaBytes() = lambda<ByteArray> { it.body().bytes() }
@@ -70,10 +80,8 @@ fun Request.Builder.lambdaDownload(downloadFile: File) = lambda<File> {
     downloadFile
 }
 
-inline fun <reified T : Any> Request.Builder.lambdaGson() = lambda<T> { response ->
-    when (T::class.java) {
-        Unit::class.java -> Unit as T
-        String::class.java -> response.body().string() as T
-        else -> response.body().string().gsonFrom<T>()!!
-    }
+inline fun <reified T : Any> Request.Builder.lambdaGson() = lambda<T> {
+    val str = it.body().string()
+    println(str)
+    str.gsonFrom<T>()!!
 }
