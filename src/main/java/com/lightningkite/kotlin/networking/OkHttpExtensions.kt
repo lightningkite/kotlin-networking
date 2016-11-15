@@ -5,6 +5,7 @@ import com.lightningkite.kotlin.stream.writeToFile
 import okhttp3.*
 import java.io.File
 import java.io.InputStream
+import java.lang.reflect.Type
 
 /**
  * Created by josep on 11/10/2016.
@@ -84,4 +85,10 @@ inline fun <reified T : Any> Request.Builder.lambdaGson() = lambda<T> {
     val str = it.body().string()
     println(str)
     str.gsonFrom<T>()!!
+}
+
+inline fun <reified T : Any> Request.Builder.lambdaGson(type: Type) = lambda<T> {
+    val str = it.body().string()
+    println(str)
+    str.gsonFrom<T>(type)!!
 }
