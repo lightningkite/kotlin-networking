@@ -74,7 +74,7 @@ fun Request.Builder.lambdaBytes() = lambda<ByteArray> { it.body().bytes() }
 
 fun Request.Builder.lambdaStream() = lambda<InputStream> { it.body().byteStream() }
 
-fun Request.Builder.lambdaJson() = lambda<JsonElement> { it.body().string().gsonToJson() }
+fun Request.Builder.lambdaJson() = lambda<JsonElement> { MyGson.json.parse(it.body().string()) }
 
 fun Request.Builder.lambdaDownload(downloadFile: File) = lambda<File> {
     it.body().byteStream().writeToFile(downloadFile)
