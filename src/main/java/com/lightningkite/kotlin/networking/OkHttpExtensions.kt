@@ -56,12 +56,12 @@ inline fun <T> Request.Builder.lambda(
             val it = DefaultOkHttpClient.newCall(request).execute()
             if (it.isSuccessful) {
                 val result = convert(it)
-                TypedResponse(it.code(), result, it.getKotlinHeaders(), null)
+                TypedResponse(it.code(), result, it.getKotlinHeaders(), null, debugNetworkRequestInfo = request.toString())
             } else {
-                TypedResponse(it.code(), null, it.getKotlinHeaders(), it.body().bytes())
+                TypedResponse(it.code(), null, it.getKotlinHeaders(), it.body().bytes(), debugNetworkRequestInfo = request.toString())
             }
         } catch(e: Exception) {
-            TypedResponse(0, null, listOf(), null, e)
+            TypedResponse(0, null, listOf(), null, e, debugNetworkRequestInfo = request.toString())
         }
     }
 }

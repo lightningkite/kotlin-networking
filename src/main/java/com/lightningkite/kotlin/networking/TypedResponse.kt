@@ -12,7 +12,8 @@ class TypedResponse<T>(
         val result: T? = null,
         val headers: List<Pair<String, String>> = listOf(),
         val errorBytes: ByteArray? = null,
-        val exception: Exception? = null
+        val exception: Exception? = null,
+        val debugNetworkRequestInfo: String? = null
 ) {
     fun isSuccessful(): Boolean = code / 100 == 2
     val errorString: String? get() = errorBytes?.toString(Charsets.UTF_8) ?: exception?.toString()
@@ -24,7 +25,7 @@ class TypedResponse<T>(
     }
 
     override fun toString(): String {
-        return "$code: result = $result, error = $errorString"
+        return "$code: result = $result, error = $errorString, requestInfo = $debugNetworkRequestInfo"
     }
 
     fun <A> copy(result: A? = null): TypedResponse<A> = TypedResponse<A>(code, result, headers, errorBytes, exception)
