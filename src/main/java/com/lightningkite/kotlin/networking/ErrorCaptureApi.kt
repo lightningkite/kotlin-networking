@@ -1,5 +1,6 @@
 package com.lightningkite.kotlin.networking
 
+import com.lightningkite.kotlin.async.doUiThread
 import com.lightningkite.kotlin.runAll
 import java.util.*
 
@@ -14,7 +15,9 @@ interface ErrorCaptureApi {
         return {
             val response = this.invoke()
             if (!response.isSuccessful()) {
-                onError.runAll(response)
+                doUiThread {
+                    onError.runAll(response)
+                }
             }
             response
         }
