@@ -48,7 +48,7 @@ abstract class CustomizedTypeAdapterFactory<C>(private val customizedClass: Clas
     }
 
     /**
-     * Override this to muck with `deserialized` before it parsed into
+     * Override this to muck with the object after it parsed into
      * the application type.
      */
     protected open fun afterRead(output: C, deserialized: JsonElement): C {
