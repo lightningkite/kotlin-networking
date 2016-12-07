@@ -1,5 +1,6 @@
 package com.lightningkite.kotlin.networking
 
+import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.JsonElement
 import com.lightningkite.kotlin.stream.writeToFile
 import okhttp3.*
@@ -83,12 +84,10 @@ fun Request.Builder.lambdaDownload(downloadFile: File) = lambda<File> {
 
 inline fun <reified T : Any> Request.Builder.lambdaGson() = lambda<T> {
     val str = it.body().string()
-    println(str)
-    str.gsonFrom<T>()!!
+    MyGson.gson.fromJson<T>(str)
 }
 
 inline fun <reified T : Any> Request.Builder.lambdaGson(type: Type) = lambda<T> {
     val str = it.body().string()
-    println(str)
-    str.gsonFrom<T>(type)!!
+    MyGson.gson.fromJson<T>(str, type)
 }
