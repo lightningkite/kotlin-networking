@@ -2,7 +2,7 @@
 
 This library isn't platform specific.
 
-This library is a collection of extension functions for OkHttp that enables OkHttp to be used in a way similar to Retrofit without all of the annotation magic.  It also includes Gson for conversion to and from JSON.
+This library is a collection of extension functions for OkHttp that enables OkHttp to be used in a way similar to Retrofit without all of the annotation magic.  It also includes Gson for receiveConversion to and from JSON.
 
 ## Key functions and classes
 
