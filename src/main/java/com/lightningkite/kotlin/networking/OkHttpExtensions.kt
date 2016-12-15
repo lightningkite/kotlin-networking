@@ -84,10 +84,12 @@ fun Request.Builder.lambdaDownload(downloadFile: File) = lambda<File> {
 
 inline fun <reified T : Any> Request.Builder.lambdaGson() = lambda<T> {
     val str = it.body().string()
+    println(str)
     MyGson.gson.fromJson<T>(str)
 }
 
 inline fun <reified T : Any> Request.Builder.lambdaGson(type: Type) = lambda<T> {
     val str = it.body().string()
+    println(str)
     MyGson.gson.fromJson<T>(str, type)
 }
