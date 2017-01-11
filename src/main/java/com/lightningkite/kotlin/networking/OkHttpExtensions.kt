@@ -57,15 +57,17 @@ inline fun <T> Request.Builder.lambda(
             val it = DefaultOkHttpClient.newCall(request).execute()
             if (it.isSuccessful) {
                 val result = convert(it)
-                TypedResponse(it.code(), result, it.getKotlinHeaders(), null, debugNetworkRequestInfo = request.toString())
+                TypedResponse(it.code(), result, it.getKotlinHeaders(), null, debugNetworkRequestInfo = request.getDebugInfoString())
             } else {
-                TypedResponse(it.code(), null, it.getKotlinHeaders(), it.body().bytes(), debugNetworkRequestInfo = request.toString())
+                TypedResponse(it.code(), null, it.getKotlinHeaders(), it.body().bytes(), debugNetworkRequestInfo = request.getDebugInfoString())
             }
         } catch(e: Exception) {
-            TypedResponse(0, null, listOf(), null, e, debugNetworkRequestInfo = request.toString())
+            TypedResponse(0, null, listOf(), null, e, debugNetworkRequestInfo = request.getDebugInfoString())
         }
     }
 }
+
+fun Request.getDebugInfoString(): String = "Request{method=${method()}, url=${url()}, tag=${if (tag() !== this) tag() else null}, headers=${headers()}}"
 
 fun Request.Builder.lambdaUnit() = lambda<Unit> { Unit }
 
