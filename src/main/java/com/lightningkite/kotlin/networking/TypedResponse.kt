@@ -63,6 +63,17 @@ inline fun <A, B> (() -> TypedResponse<A>).chain(crossinline otherLambdaGenerato
     }
 }
 
+inline fun <A, B> (() -> TypedResponse<A>).chainTypeless(crossinline default: (TypedResponse<A>) -> B, crossinline otherLambdaGenerator: (A) -> () -> B): () -> B {
+    return {
+        val response = this.invoke()
+        if (!response.isSuccessful()) {
+            default(response)
+        } else {
+            otherLambdaGenerator(response.result!!).invoke()
+        }
+    }
+}
+
 inline fun <A, B> (() -> TypedResponse<A>).mapResult(crossinline mapper: (A) -> B): () -> TypedResponse<B> {
     return {
         this.invoke().map(mapper)
