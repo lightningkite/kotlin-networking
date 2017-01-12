@@ -1,9 +1,14 @@
 package com.lightningkite.kotlin.networking
 
 import com.github.salomonbrys.kotson.fromJson
+import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.lightningkite.kotlin.stream.writeToFile
 import okhttp3.*
+import okhttp3.internal.Util
+import okio.BufferedSink
+import okio.Okio
+import okio.Source
 import java.io.File
 import java.io.InputStream
 import java.lang.reflect.Type
@@ -23,20 +28,55 @@ fun Response.getKotlinHeaders(): List<Pair<String, String>> {
     return list
 }
 
-fun <T : Any> T.gsonToRequestBody(): RequestBody {
-    return RequestBody.create(MediaTypes.JSON, this.gsonToString())
+fun <T : Any> T.gsonToRequestBody(gson: Gson = MyGson.gson): RequestBody = object : RequestBody() {
+    override fun contentType(): MediaType = MediaTypes.JSON
+    val string = this@gsonToRequestBody.gsonToString()
+    val bytes = string.toByteArray()
+    override fun contentLength(): Long = bytes.size.toLong()
+    override fun writeTo(sink: BufferedSink) {
+        sink.write(bytes)
+    }
+
+    override fun toString(): String = string
 }
 
-fun JsonElement.toRequestBody(): RequestBody {
-    return RequestBody.create(MediaTypes.JSON, this.toString())
+fun JsonElement.toRequestBody(): RequestBody = object : RequestBody() {
+    override fun contentType(): MediaType = MediaTypes.JSON
+    val string = this@toRequestBody.toString()
+    val bytes = string.toByteArray()
+    override fun contentLength(): Long = bytes.size.toLong()
+    override fun writeTo(sink: BufferedSink) {
+        sink.write(bytes)
+    }
+
+    override fun toString(): String = string
 }
 
-fun String.toRequestBody(): RequestBody {
-    return RequestBody.create(MediaTypes.TEXT, this)
+fun String.toRequestBody(): RequestBody = object : RequestBody() {
+    override fun contentType(): MediaType = MediaTypes.TEXT
+    val bytes = this@toRequestBody.toByteArray()
+    override fun contentLength(): Long = bytes.size.toLong()
+    override fun writeTo(sink: BufferedSink) {
+        sink.write(bytes)
+    }
+
+    override fun toString(): String = this@toRequestBody
 }
 
-fun File.toRequestBody(type: MediaType): RequestBody {
-    return RequestBody.create(type, this)
+fun File.toRequestBody(type: MediaType): RequestBody = object : RequestBody() {
+    override fun contentLength(): Long = this@toRequestBody.length()
+    override fun contentType(): MediaType = MediaTypes.TEXT
+    override fun writeTo(sink: BufferedSink) {
+        var source: Source? = null
+        try {
+            source = Okio.source(this@toRequestBody)
+            sink.writeAll(source)
+        } finally {
+            Util.closeQuietly(source)
+        }
+    }
+
+    override fun toString(): String = this@toRequestBody.toString()
 }
 
 inline fun <T> Request.Builder.lambdaCustom(
@@ -67,7 +107,7 @@ inline fun <T> Request.Builder.lambda(
     }
 }
 
-fun Request.getDebugInfoString(): String = "Request{method=${method()}, url=${url()}, tag=${if (tag() !== this) tag() else null}, headers=${headers()}}"
+fun Request.getDebugInfoString(): String = "Request{method=${method()}, url=${url()}, tag=${if (tag() !== this) tag() else null}, headers=${headers()}, body=${body()}}"
 
 fun Request.Builder.lambdaUnit() = lambda<Unit> { Unit }
 
