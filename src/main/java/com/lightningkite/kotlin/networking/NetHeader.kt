@@ -3,6 +3,7 @@ package com.lightningkite.kotlin.networking
 import java.util.*
 
 /**
+ *
  * Created by jivie on 1/28/16.
  */
 class NetHeader(vararg pairs: Pair<String, String>) : HashMap<String, String>() {
