@@ -24,16 +24,18 @@ abstract class CustomizedTypeAdapterFactory<C>(private val customizedClass: Clas
         val elementAdapter = gson.getAdapter(JsonElement::class.java)
         return object : TypeAdapter<C>() {
             @Throws(IOException::class)
-            override fun write(out: JsonWriter, value: C) {
+            override fun write(out: JsonWriter, value: C?) {
                 val tree = delegate.toJsonTree(value)
                 elementAdapter.write(out, tree)
-                afterWrite(value, tree)
+                if (value != null) {
+                    afterWrite(value, tree)
+                }
             }
 
             @Throws(IOException::class)
-            override fun read(`in`: JsonReader): C {
+            override fun read(`in`: JsonReader): C? {
                 val tree = elementAdapter.read(`in`)
-                return delegate.fromJsonTree(tree).apply {
+                return delegate.fromJsonTree(tree)?.apply {
                     afterRead(this, tree)
                 }
             }
@@ -48,7 +50,7 @@ abstract class CustomizedTypeAdapterFactory<C>(private val customizedClass: Clas
     }
 
     /**
-     * Override this to muck with `deserialized` before it parsed into
+     * Override this to muck with the object after it parsed into
      * the application type.
      */
     protected open fun afterRead(output: C, deserialized: JsonElement): C {
