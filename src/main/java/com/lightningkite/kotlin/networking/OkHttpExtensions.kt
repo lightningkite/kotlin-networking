@@ -14,10 +14,11 @@ import java.io.InputStream
 import java.lang.reflect.Type
 
 /**
+ *
  * Created by josep on 11/10/2016.
+ *
  */
 
-object DefaultOkHttpClient : OkHttpClient()
 
 fun Response.getKotlinHeaders(): List<Pair<String, String>> {
     val headers = headers()
@@ -79,22 +80,22 @@ fun File.toRequestBody(type: MediaType): RequestBody = object : RequestBody() {
     override fun toString(): String = this@toRequestBody.toString()
 }
 
-inline fun <T> Request.Builder.lambdaCustom(
+inline fun <T> Request.Builder.lambdaCustom(client: OkHttpClient,
         crossinline convert: (Response) -> TypedResponse<T>
 ): () -> TypedResponse<T> {
     val request = build()
     return {
-        convert(DefaultOkHttpClient.newCall(request).execute())
+        convert(client.newCall(request).execute())
     }
 }
 
-inline fun <T> Request.Builder.lambda(
+inline fun <T> Request.Builder.lambda(client: OkHttpClient,
         crossinline convert: (Response) -> T
 ): () -> TypedResponse<T> {
     val request = build()
     return {
         try {
-            val it = DefaultOkHttpClient.newCall(request).execute()
+            val it = client.newCall(request).execute()
             if (it.isSuccessful) {
                 val result = convert(it)
                 TypedResponse(it.code(), result, it.getKotlinHeaders(), null, debugNetworkRequestInfo = request.getDebugInfoString())
@@ -109,28 +110,28 @@ inline fun <T> Request.Builder.lambda(
 
 fun Request.getDebugInfoString(): String = "Request{method=${method()}, url=${url()}, tag=${if (tag() !== this) tag() else null}, headers=${headers()}, body=${body()}}"
 
-fun Request.Builder.lambdaUnit() = lambda<Unit> { Unit }
+fun Request.Builder.lambdaUnit(client: OkHttpClient) = lambda<Unit>(client) { Unit }
 
-fun Request.Builder.lambdaString() = lambda<String> { it.body().string() }
+fun Request.Builder.lambdaString(client: OkHttpClient) = lambda<String>(client) { it.body().string() }
 
-fun Request.Builder.lambdaBytes() = lambda<ByteArray> { it.body().bytes() }
+fun Request.Builder.lambdaBytes(client: OkHttpClient) = lambda<ByteArray>(client) { it.body().bytes() }
 
-fun Request.Builder.lambdaStream() = lambda<InputStream> { it.body().byteStream() }
+fun Request.Builder.lambdaStream(client: OkHttpClient) = lambda<InputStream>(client) { it.body().byteStream() }
 
-fun Request.Builder.lambdaJson() = lambda<JsonElement> { MyGson.json.parse(it.body().string()) }
+fun Request.Builder.lambdaJson(client: OkHttpClient) = lambda<JsonElement>(client) { MyGson.json.parse(it.body().string()) }
 
-fun Request.Builder.lambdaDownload(downloadFile: File) = lambda<File> {
+fun Request.Builder.lambdaDownload(client: OkHttpClient, downloadFile: File) = lambda<File>(client) {
     it.body().byteStream().writeToFile(downloadFile)
     downloadFile
 }
 
-inline fun <reified T : Any> Request.Builder.lambdaGson() = lambda<T> {
+inline fun <reified T : Any> Request.Builder.lambdaGson(client: OkHttpClient) = lambda<T>(client) {
     val str = it.body().string()
     println(str)
     MyGson.gson.fromJson<T>(str)
 }
 
-inline fun <reified T : Any> Request.Builder.lambdaGson(type: Type) = lambda<T> {
+inline fun <reified T : Any> Request.Builder.lambdaGson(client: OkHttpClient, type: Type) = lambda<T>(client) {
     val str = it.body().string()
     println(str)
     MyGson.gson.fromJson<T>(str, type)
