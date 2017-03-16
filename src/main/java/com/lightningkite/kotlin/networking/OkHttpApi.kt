@@ -1,6 +1,5 @@
 package com.lightningkite.kotlin.networking
 
-import okhttp3.OkHttpClient
 import okhttp3.Request
 
 /**
@@ -9,7 +8,6 @@ import okhttp3.Request
 interface OkHttpApi {
     val baseUrl: String
     val headers: List<Pair<String, String>> get() = listOf()
-    val client: OkHttpClient
 
 
     fun requestBuilder(urlFromBase: String): Request.Builder {

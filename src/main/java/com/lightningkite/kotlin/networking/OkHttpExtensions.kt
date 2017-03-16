@@ -19,6 +19,7 @@ import java.lang.reflect.Type
  *
  */
 
+val defaultClient = OkHttpClient()
 
 fun Response.getKotlinHeaders(): List<Pair<String, String>> {
     val headers = headers()
@@ -80,8 +81,8 @@ fun File.toRequestBody(type: MediaType): RequestBody = object : RequestBody() {
     override fun toString(): String = this@toRequestBody.toString()
 }
 
-inline fun <T> Request.Builder.lambdaCustom(client: OkHttpClient,
-        crossinline convert: (Response) -> TypedResponse<T>
+inline fun <T> Request.Builder.lambdaCustom(client: OkHttpClient = defaultClient,
+                                            crossinline convert: (Response) -> TypedResponse<T>
 ): () -> TypedResponse<T> {
     val request = build()
     return {
@@ -89,8 +90,8 @@ inline fun <T> Request.Builder.lambdaCustom(client: OkHttpClient,
     }
 }
 
-inline fun <T> Request.Builder.lambda(client: OkHttpClient,
-        crossinline convert: (Response) -> T
+inline fun <T> Request.Builder.lambda(client: OkHttpClient = defaultClient,
+                                      crossinline convert: (Response) -> T
 ): () -> TypedResponse<T> {
     val request = build()
     return {
@@ -110,28 +111,28 @@ inline fun <T> Request.Builder.lambda(client: OkHttpClient,
 
 fun Request.getDebugInfoString(): String = "Request{method=${method()}, url=${url()}, tag=${if (tag() !== this) tag() else null}, headers=${headers()}, body=${body()}}"
 
-fun Request.Builder.lambdaUnit(client: OkHttpClient) = lambda<Unit>(client) { Unit }
+fun Request.Builder.lambdaUnit(client: OkHttpClient = defaultClient) = lambda<Unit>(client) { Unit }
 
-fun Request.Builder.lambdaString(client: OkHttpClient) = lambda<String>(client) { it.body().string() }
+fun Request.Builder.lambdaString(client: OkHttpClient = defaultClient) = lambda<String>(client) { it.body().string() }
 
-fun Request.Builder.lambdaBytes(client: OkHttpClient) = lambda<ByteArray>(client) { it.body().bytes() }
+fun Request.Builder.lambdaBytes(client: OkHttpClient = defaultClient) = lambda<ByteArray>(client) { it.body().bytes() }
 
-fun Request.Builder.lambdaStream(client: OkHttpClient) = lambda<InputStream>(client) { it.body().byteStream() }
+fun Request.Builder.lambdaStream(client: OkHttpClient = defaultClient) = lambda<InputStream>(client) { it.body().byteStream() }
 
-fun Request.Builder.lambdaJson(client: OkHttpClient) = lambda<JsonElement>(client) { MyGson.json.parse(it.body().string()) }
+fun Request.Builder.lambdaJson(client: OkHttpClient = defaultClient) = lambda<JsonElement>(client) { MyGson.json.parse(it.body().string()) }
 
-fun Request.Builder.lambdaDownload(client: OkHttpClient, downloadFile: File) = lambda<File>(client) {
+fun Request.Builder.lambdaDownload(client: OkHttpClient = defaultClient, downloadFile: File) = lambda<File>(client) {
     it.body().byteStream().writeToFile(downloadFile)
     downloadFile
 }
 
-inline fun <reified T : Any> Request.Builder.lambdaGson(client: OkHttpClient) = lambda<T>(client) {
+inline fun <reified T : Any> Request.Builder.lambdaGson(client: OkHttpClient = defaultClient) = lambda<T>(client) {
     val str = it.body().string()
     println(str)
     MyGson.gson.fromJson<T>(str)
 }
 
-inline fun <reified T : Any> Request.Builder.lambdaGson(client: OkHttpClient, type: Type) = lambda<T>(client) {
+inline fun <reified T : Any> Request.Builder.lambdaGson(client: OkHttpClient = defaultClient, type: Type) = lambda<T>(client) {
     val str = it.body().string()
     println(str)
     MyGson.gson.fromJson<T>(str, type)
