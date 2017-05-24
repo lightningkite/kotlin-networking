@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.1.1'
+    ext.kotlin_version = '1.1.2-3'
     repositories {
         mavenCentral()
     }
@@ -21,7 +21,7 @@ dependencies {
     testCompile 'junit:junit:4.11'
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     compile project(':kotlin-core')
-    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.github.salomonbrys.kotson:kotson:2.1.0'
 }
