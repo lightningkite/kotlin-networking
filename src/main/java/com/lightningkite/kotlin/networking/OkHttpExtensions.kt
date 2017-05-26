@@ -67,7 +67,7 @@ fun String.toRequestBody(): RequestBody = object : RequestBody() {
 
 fun File.toRequestBody(type: MediaType): RequestBody = object : RequestBody() {
     override fun contentLength(): Long = this@toRequestBody.length()
-    override fun contentType(): MediaType = MediaTypes.TEXT
+    override fun contentType(): MediaType = type
     override fun writeTo(sink: BufferedSink) {
         var source: Source? = null
         try {
