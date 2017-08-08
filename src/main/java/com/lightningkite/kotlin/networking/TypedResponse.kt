@@ -81,6 +81,10 @@ inline fun <A, B> (() -> TypedResponse<A>).chainTypeless(crossinline default: (T
 
 inline fun <A, B> (() -> TypedResponse<A>).mapResult(crossinline mapper: (A) -> B): () -> TypedResponse<B> {
     return {
-        this.invoke().map(mapper)
+        try {
+            this.invoke().map(mapper)
+        } catch (e: Exception) {
+            TypedResponse(1, null, exception = e)
+        }
     }
 }
