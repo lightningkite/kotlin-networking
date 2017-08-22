@@ -65,6 +65,17 @@ fun String.toRequestBody(): RequestBody = object : RequestBody() {
     override fun toString(): String = this@toRequestBody
 }
 
+fun ByteArray.toRequestBody(): RequestBody = object : RequestBody() {
+    override fun contentType(): MediaType = MediaTypes.TEXT
+    val bytes = this@toRequestBody
+    override fun contentLength(): Long = bytes.size.toLong()
+    override fun writeTo(sink: BufferedSink) {
+        sink.write(bytes)
+    }
+
+    override fun toString(): String = "ByteArray"
+}
+
 fun File.toRequestBody(type: MediaType): RequestBody = object : RequestBody() {
     override fun contentLength(): Long = this@toRequestBody.length()
     override fun contentType(): MediaType = type
