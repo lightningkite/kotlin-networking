@@ -28,12 +28,12 @@ class TypedResponse<T>(
         return "$code: result = $result, error = $errorString, requestInfo = $debugNetworkRequestInfo"
     }
 
-    fun copy(code: Int, errorString: String?): TypedResponse<T> = TypedResponse<T>(code, result, headers, errorString?.toByteArray(), exception)
-    fun <A> copy(result: A? = null): TypedResponse<A> = TypedResponse<A>(code, result, headers, errorBytes, exception)
+    fun copy(code: Int, errorString: String?): TypedResponse<T> = TypedResponse<T>(code, result, headers, errorString?.toByteArray(), exception, debugNetworkRequestInfo)
+    fun <A> copy(result: A? = null): TypedResponse<A> = TypedResponse<A>(code, result, headers, errorBytes, exception, debugNetworkRequestInfo)
     inline fun <A> map(mapper: (T) -> A): TypedResponse<A> = try{
-        TypedResponse<A>(code, if (result != null) mapper(result) else null, headers, errorBytes, exception)
+        TypedResponse<A>(code, if (result != null) mapper(result) else null, headers, errorBytes, exception, debugNetworkRequestInfo)
     } catch(e:Exception){
-        TypedResponse<A>(0, null, headers, errorBytes, e)
+        TypedResponse<A>(0, null, headers, errorBytes, e, debugNetworkRequestInfo)
     }
 }
 
