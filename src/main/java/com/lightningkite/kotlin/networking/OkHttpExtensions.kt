@@ -30,30 +30,6 @@ fun Response.getKotlinHeaders(): List<Pair<String, String>> {
     return list
 }
 
-fun <T : Any> T.gsonToRequestBody(gson: Gson = MyGson.gson): RequestBody = object : RequestBody() {
-    override fun contentType(): MediaType = MediaTypes.JSON!!
-    val string = this@gsonToRequestBody.gsonToString()
-    val bytes = string.toByteArray()
-    override fun contentLength(): Long = bytes.size.toLong()
-    override fun writeTo(sink: BufferedSink) {
-        sink.write(bytes)
-    }
-
-    override fun toString(): String = string
-}
-
-fun JsonElement.toRequestBody(): RequestBody = object : RequestBody() {
-    override fun contentType(): MediaType = MediaTypes.JSON!!
-    val string = this@toRequestBody.toString()
-    val bytes = string.toByteArray()
-    override fun contentLength(): Long = bytes.size.toLong()
-    override fun writeTo(sink: BufferedSink) {
-        sink.write(bytes)
-    }
-
-    override fun toString(): String = string
-}
-
 fun String.toRequestBody(): RequestBody = object : RequestBody() {
     override fun contentType(): MediaType = MediaTypes.TEXT!!
     val bytes = this@toRequestBody.toByteArray()
@@ -130,21 +106,7 @@ fun Request.Builder.lambdaBytes(client: OkHttpClient = defaultClient) = lambda<B
 
 fun Request.Builder.lambdaStream(client: OkHttpClient = defaultClient) = lambda<InputStream>(client) { it.body()!!.byteStream() }
 
-fun Request.Builder.lambdaJson(client: OkHttpClient = defaultClient) = lambda<JsonElement>(client) { MyGson.json.parse(it.body()!!.string()) }
-
 fun Request.Builder.lambdaDownload(client: OkHttpClient = defaultClient, downloadFile: File) = lambda<File>(client) {
     it.body()!!.byteStream().writeToFile(downloadFile)
     downloadFile
-}
-
-inline fun <reified T : Any> Request.Builder.lambdaGson(client: OkHttpClient = defaultClient) = lambda<T>(client) {
-    val str = it.body()!!.string()
-    println(str)
-    MyGson.gson.fromJson<T>(str)
-}
-
-inline fun <reified T : Any> Request.Builder.lambdaGson(client: OkHttpClient = defaultClient, type: Type) = lambda<T>(client) {
-    val str = it.body()!!.string()
-    println(str)
-    MyGson.gson.fromJson<T>(str, type)
 }
