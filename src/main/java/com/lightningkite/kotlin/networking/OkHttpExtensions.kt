@@ -1,8 +1,5 @@
 package com.lightningkite.kotlin.networking
 
-import com.github.salomonbrys.kotson.fromJson
-import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.lightningkite.kotlin.stream.writeToFile
 import okhttp3.*
 import okhttp3.internal.Util
@@ -11,7 +8,6 @@ import okio.Okio
 import okio.Source
 import java.io.File
 import java.io.InputStream
-import java.lang.reflect.Type
 
 /**
  *

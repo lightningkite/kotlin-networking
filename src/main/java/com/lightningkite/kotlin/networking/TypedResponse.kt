@@ -1,7 +1,5 @@
 package com.lightningkite.kotlin.networking
 
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
 import com.lightningkite.kotlin.async.doUiThread
 
 /**
@@ -17,12 +15,6 @@ class TypedResponse<T>(
 ) {
     fun isSuccessful(): Boolean = code / 100 == 2
     val errorString: String? get() = errorBytes?.toString(Charsets.UTF_8) ?: exception?.toString()
-    val errorJson: JsonElement? get() = try {
-        MyGson.json.parse(errorBytes?.toString(Charsets.UTF_8))
-    } catch(e: Exception) {
-        e.printStackTrace()
-        JsonNull.INSTANCE
-    }
 
     override fun toString(): String {
         return "$code: result = $result, error = $errorString, requestInfo = $debugNetworkRequestInfo"
