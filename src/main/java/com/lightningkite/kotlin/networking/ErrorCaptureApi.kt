@@ -1,7 +1,6 @@
 package com.lightningkite.kotlin.networking
 
-import com.lightningkite.kotlin.async.doUiThread
-import com.lightningkite.kotlin.invokeAll
+import com.lightningkite.kotlin.lambda.invokeAll
 import java.util.*
 
 /**
