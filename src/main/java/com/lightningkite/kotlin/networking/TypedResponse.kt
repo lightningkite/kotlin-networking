@@ -1,8 +1,8 @@
 package com.lightningkite.kotlin.networking
 
-import com.lightningkite.kotlin.async.doUiThread
 
 /**
+ * Represents a response from a server that is typed.
  * Created by josep on 11/10/2016.
  */
 class TypedResponse<T>(
@@ -26,57 +26,5 @@ class TypedResponse<T>(
         TypedResponse<A>(code, if (result != null) mapper(result) else null, headers, errorBytes, exception, debugNetworkRequestInfo)
     } catch(e:Exception){
         TypedResponse<A>(0, null, headers, errorBytes, e, debugNetworkRequestInfo)
-    }
-}
-
-inline fun <T> (() -> TypedResponse<T>).captureSuccess(crossinline onSuccess: (T) -> Unit): () -> TypedResponse<T> {
-    return {
-        val response = this.invoke()
-        if (response.isSuccessful()) {
-            doUiThread { onSuccess(response.result!!) }
-        }
-        response
-    }
-}
-
-inline fun <T> (() -> TypedResponse<T>).captureFailure(crossinline onFailure: (TypedResponse<T>) -> Unit): () -> TypedResponse<T> {
-    return {
-        val response = this.invoke()
-        if (!response.isSuccessful()) {
-            doUiThread { onFailure(response) }
-        }
-        response
-    }
-}
-
-inline fun <A, B> (() -> TypedResponse<A>).chain(crossinline otherLambdaGenerator: (A) -> () -> TypedResponse<B>): () -> TypedResponse<B> {
-    return {
-        val response = this.invoke()
-        if (!response.isSuccessful()) {
-            TypedResponse(response.code, null, response.headers, response.errorBytes, response.exception)
-        } else {
-            otherLambdaGenerator(response.result!!).invoke()
-        }
-    }
-}
-
-inline fun <A, B> (() -> TypedResponse<A>).chainTypeless(crossinline default: (TypedResponse<A>) -> B, crossinline otherLambdaGenerator: (A) -> () -> B): () -> B {
-    return {
-        val response = this.invoke()
-        if (!response.isSuccessful()) {
-            default(response)
-        } else {
-            otherLambdaGenerator(response.result!!).invoke()
-        }
-    }
-}
-
-inline fun <A, B> (() -> TypedResponse<A>).mapResult(crossinline mapper: (A) -> B): () -> TypedResponse<B> {
-    return {
-        try {
-            this.invoke().map(mapper)
-        } catch (e: Exception) {
-            TypedResponse(1, null, exception = e)
-        }
     }
 }

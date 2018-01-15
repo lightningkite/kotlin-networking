@@ -15,6 +15,9 @@ import okhttp3.RequestBody
 import okio.BufferedSink
 
 
+/**
+ * Converts any object into a [RequestBody] by using Jackson to convert it into a JSON string.
+ */
 fun <T : Any> T.jacksonToRequestBody(mapper:ObjectMapper = MyJackson.mapper): RequestBody = object : RequestBody() {
     override fun contentType(): MediaType = MediaTypes.JSON!!
     val string = mapper.writeValueAsString(this@jacksonToRequestBody)
@@ -27,6 +30,9 @@ fun <T : Any> T.jacksonToRequestBody(mapper:ObjectMapper = MyJackson.mapper): Re
     override fun toString(): String = string
 }
 
+/**
+ * Converts a [JsonNode] into a [RequestBody] by using Jackson to convert it into a JSON string.
+ */
 fun JsonNode.toRequestBody(): RequestBody = object : RequestBody() {
     override fun contentType(): MediaType = MediaTypes.JSON!!
     val string = this@toRequestBody.toString()
@@ -40,22 +46,38 @@ fun JsonNode.toRequestBody(): RequestBody = object : RequestBody() {
 }
 
 
+/**
+ * Transforms the request into a lambda to be executed later.
+ * The lambda will return a Jackson node and other data about the response.
+ */
 fun Request.Builder.lambdaJacksonNode(client: OkHttpClient = defaultClient, mapper: ObjectMapper = MyJackson.mapper): () -> TypedResponse<JsonNode> = lambda<JsonNode>(client) { MyJackson.mapper.readTree(it.body()!!.string()) }
 
 
+/**
+ * Transforms the request into a lambda to be executed later.
+ * The lambda will return an object of type [T] by using Jackson to convert from JSON, as well as other data about the response.
+ */
 inline fun <reified T : Any> Request.Builder.lambdaJackson(client: OkHttpClient = defaultClient, mapper: ObjectMapper = MyJackson.mapper): () -> TypedResponse<T> = lambda<T>(client) {
     val str = it.body()!!.string()
     println(str)
     mapper.readValue<T>(str, object : TypeReference<T>(){})
 }
 
-fun <T : Any> Request.Builder.lambdaJackson(client: OkHttpClient = defaultClient, mapper: ObjectMapper = MyJackson.mapper, type: JavaType): () -> TypedResponse<T> = lambda<T>(client) {
+/**
+ * Transforms the request into a lambda to be executed later.
+ * The lambda will return an object of type [type] by using Jackson to convert from JSON, as well as other data about the response.
+ */
+fun <T : Any> Request.Builder.lambdaJackson(type: JavaType, client: OkHttpClient = defaultClient, mapper: ObjectMapper = MyJackson.mapper): () -> TypedResponse<T> = lambda<T>(client) {
     val str = it.body()!!.string()
     println(str)
     mapper.readValue<T>(str, type)
 }
 
-fun <T : Any> Request.Builder.lambdaJackson(client: OkHttpClient = defaultClient, mapper: ObjectMapper = MyJackson.mapper, type: TypeReference<T>): () -> TypedResponse<T> = lambda<T>(client) {
+/**
+ * Transforms the request into a lambda to be executed later.
+ * The lambda will return an object of type [type] by using Jackson to convert from JSON, as well as other data about the response.
+ */
+fun <T : Any> Request.Builder.lambdaJackson(type: TypeReference<T>, client: OkHttpClient = defaultClient, mapper: ObjectMapper = MyJackson.mapper): () -> TypedResponse<T> = lambda<T>(client) {
     val str = it.body()!!.string()
     println(str)
     mapper.readValue<T>(str, type)
