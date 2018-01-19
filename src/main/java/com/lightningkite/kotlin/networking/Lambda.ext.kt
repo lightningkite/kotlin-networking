@@ -3,7 +3,7 @@ package com.lightningkite.kotlin.networking
 import java.util.concurrent.Executor
 
 
-inline fun <T> (() -> TypedResponse<T>).captureSuccess(executor: Executor, crossinline onSuccess: (T) -> Unit): () -> TypedResponse<T> {
+inline fun <T> (() -> TypedResponse<T>).thenOnSuccess(executor: Executor, crossinline onSuccess: (T) -> Unit): () -> TypedResponse<T> {
     return {
         val response = this.invoke()
         if (response.isSuccessful()) {
@@ -13,7 +13,7 @@ inline fun <T> (() -> TypedResponse<T>).captureSuccess(executor: Executor, cross
     }
 }
 
-inline fun <T> (() -> TypedResponse<T>).captureFailure(executor: Executor, crossinline onFailure: (TypedResponse<T>) -> Unit): () -> TypedResponse<T> {
+inline fun <T> (() -> TypedResponse<T>).thenOnFailure(executor: Executor, crossinline onFailure: (TypedResponse<T>) -> Unit): () -> TypedResponse<T> {
     return {
         val response = this.invoke()
         if (!response.isSuccessful()) {
