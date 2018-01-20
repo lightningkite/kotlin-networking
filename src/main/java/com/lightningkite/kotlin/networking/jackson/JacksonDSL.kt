@@ -18,6 +18,7 @@ object MyJackson {
             .setSerializationInclusion(JsonInclude.Include.ALWAYS)
             .setFilterProvider(filterProvider)
             .registerModule(KotlinModule())
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
             .registerModule(object : SimpleModule() {
