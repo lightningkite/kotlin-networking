@@ -1,6 +1,5 @@
 package com.lightningkite.kotlin.networking
 
-import com.lightningkite.kotlin.stream.writeStream
 import okhttp3.*
 import okhttp3.internal.Util
 import okio.BufferedSink
@@ -136,6 +135,10 @@ fun Request.Builder.lambdaStream(client: OkHttpClient = defaultClient) = lambda<
  * Converts the request into a lambda that downloads the response as a file and returns information about if it was successful.
  */
 fun Request.Builder.lambdaDownload(client: OkHttpClient = defaultClient, downloadFile: File) = lambda<File>(client) {
-    downloadFile.writeStream(it.body()!!.byteStream())
+    downloadFile.outputStream().use { outputStream ->
+        it.body()!!.byteStream().use { inputStream ->
+            inputStream.copyTo(outputStream)
+        }
+    }
     downloadFile
 }
