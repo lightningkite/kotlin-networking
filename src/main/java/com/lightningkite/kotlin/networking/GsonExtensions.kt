@@ -53,6 +53,8 @@ inline fun <reified T : Any> String.gsonFrom(gson: Gson = MyGson.gson): T? {
         e.printStackTrace()
     } catch(e: JsonSyntaxException) {
         e.printStackTrace()
+    } catch (e: IllegalStateException) {
+        e.printStackTrace()
     }
     return null
 }
@@ -63,6 +65,8 @@ inline fun <reified T : Any> JsonElement.gsonFrom(gson: Gson = MyGson.gson): T? 
     } catch(e: JsonParseException) {
         e.printStackTrace()
     } catch(e: JsonSyntaxException) {
+        e.printStackTrace()
+    } catch (e: IllegalStateException) {
         e.printStackTrace()
     }
     return null
